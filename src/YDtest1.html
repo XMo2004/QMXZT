@@ -18,6 +18,12 @@
     };
     </script>
     <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
         .question-container {
             transition: all 0.3s ease;
         }
@@ -36,6 +42,9 @@
         .wrong-answer {
             background-color: #FEE2E2;
             border-color: #EF4444;
+        }
+        input[type="radio"]:disabled + span {
+            color: #9CA3AF;
         }
     </style>
 </head>
@@ -91,6 +100,16 @@
     </div>
 
     <script>
+        // 禁止复制功能
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'x' || e.key === 'X')) {
+                e.preventDefault();
+            }
+        });
+        
         document.addEventListener('DOMContentLoaded', function() {
             // 题目数据
             const questions = [
@@ -1276,6 +1295,14 @@
                                 });
                             }
                             feedbackDiv.classList.remove('hidden');
+                            
+                            // 选择后禁止更改答案
+                            questionContainer.querySelectorAll('input[type="radio"]').forEach(input => {
+                                if (!input.checked) {
+                                    input.disabled = true;
+                                    input.closest('label').style.cursor = 'not-allowed';
+                                }
+                            });
                         }
                     }
                 });
@@ -1311,12 +1338,14 @@
                 // 重置所有选择
                 document.querySelectorAll('input[type="radio"]').forEach(radio => {
                     radio.checked = false;
+                    radio.disabled = false; // 启用所有选项
                 });
                 
                 // 移除所有样式
                 document.querySelectorAll('.question-container').forEach(container => {
                     container.querySelectorAll('label').forEach(label => {
-                        label.classList.remove('selected-option', 'correct-answer', 'wrong-answer');
+                        label.classList.remove('selected-option', 'correct-answer', 'wrong-answer', 'opacity-50');
+                        label.style.cursor = 'pointer';
                     });
                     
                     const questionNumber = container.querySelector('.w-8');
