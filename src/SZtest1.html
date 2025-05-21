@@ -6,16 +6,17 @@
     <title>数字通信选择题</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <script>
     MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']]
       },
-      svg: {
-        fontCache: 'global',
+      chtml: {
         scale: 1,
-        matchFontHeight: false
+        minScale: 0.5,
+        matchFontHeight: false,
+        adaptiveCSS: true
       },
       options: {
         enableMenu: false
