@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动通信选择题</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <style>
+        .question-container {
+            transition: all 0.3s ease;
+        }
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .selected-option {
+            background-color: #EFF6FF;
+            border-color: #3B82F6;
+        }
+        .correct-answer {
+            background-color: #D1FAE5;
+            border-color: #10B981;
+        }
+        .wrong-answer {
+            background-color: #FEE2E2;
+            border-color: #EF4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">移动通信-选择题</h1>
+            <p class="text-gray-600 mb-4">共<span id="totalQuestions">55</span>题</p>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                    <span class="text-sm text-gray-600">未作答</span>
+                </div>
+                <div class="flex items-center ml-4">
+                    <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                    <span class="text-sm text-gray-600">已作答</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div class="flex justify-between mt-8">
+            <button type="button" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                查看结果
+            </button>
+            <button type="button" id="resetBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition">
+                重新开始
+            </button>
+        </div>
+
+        <div id="resultModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">考试结果</h2>
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">正确题数:</span>
+                        <span id="correctCount" class="font-medium">0/0</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-600">得分:</span>
+                        <span id="score" class="font-medium">0分</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                        <div id="scoreBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button id="closeModalBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition">
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 题目数据
+            const questions = [
+            {
+        id: "q1",
+        question: "5G移动通信系统所提供的业务承载最高速率为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) bps",
+        options: [
+            { value: "A", text: "2M" },
+            { value: "B", text: "7.5G" },
+            { value: "C", text: "64k" },
+            { value: "D", text: "100M" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q2",
+        question: "公众移动通信系统无线电路工作方式采用的是： (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )",
+        options: [
+            { value: "A", text: "全双工方式" },
+            { value: "B", text: "准双工方式" },
+            { value: "C", text: "半双工方式" },
+            { value: "D", text: "单工方式" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q3",
+        question: "中兴、华为、大唐、烽火等不可能属于移动通信产业链中的 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )",
+        options: [
+            { value: "A", text: "网络设备提供商" },
+            { value: "B", text: "系统开发商" },
+            { value: "C", text: "移动通信运营商" },
+            { value: "D", text: "终端提供商" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q4",
+        question: "中国移动的TD-LTE频段宽度分配了多少 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) Hz",
+        options: [
+            { value: "A", text: "130M" },
+            { value: "B", text: "5M" },
+            { value: "C", text: "15M" },
+            { value: "D", text: "10M" },
+            { value: "E", text: "20M" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q5",
+        question: "移动通信是一种 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "有线与无线相结合的通信网络融合" },
+            { value: "B", text: "以上都对" },
+            { value: "C", text: "有线通信" },
+            { value: "D", text: "无线通信" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q6",
+        question: "4G移动通信系统所提供的业务承载最高速率为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) bps",
+        options: [
+            { value: "A", text: "64k" },
+            { value: "B", text: "100M" },
+            { value: "C", text: "2.4k" },
+            { value: "D", text: "2M" },
+            { value: "E", text: "7.5G" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q7",
+        question: "第一代模拟移动通信系统典型代表是美国的AMPS系统和英国TACS系统。我国1987年开通的900MHz模拟蜂窝移动通信系统制式是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "TACS" },
+            { value: "B", text: "AMPS" },
+            { value: "C", text: "GSM" },
+            { value: "D", text: "CDMA" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q8",
+        question: "中国电信的LTE FDD工作频段为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "1765–1780/1860–1875" },
+            { value: "B", text: "1735–1755/1830–1850" },
+            { value: "C", text: "1710–1735/1805–1830" },
+            { value: "D", text: "1750–1765/1845–1860" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q9",
+        question: "移动通信中的英文缩略语PLMN的中文含义是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "拜访位置寄存器" },
+            { value: "B", text: "归属位置寄存器" },
+            { value: "C", text: "公共陆地移动通信网" },
+            { value: "D", text: "位置登记" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q10",
+        question: "GSM系统中的用户识别卡是： (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "UIM卡" },
+            { value: "B", text: "PIM卡" },
+            { value: "C", text: "SIM卡" },
+            { value: "D", text: "USIM卡" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q11",
+        question: "我国CDMA800移动通信系统中，MS的发射机工作频段是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "825MHz–835MHz" },
+            { value: "B", text: "870MHz–880MHz" },
+            { value: "C", text: "935MHz–960MHz" },
+            { value: "D", text: "890MHz–909MHz" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q12",
+        question: "以下哪种双工方式是TD-LTE所采用的 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "H-FDD" },
+            { value: "B", text: "TDD" },
+            { value: "C", text: "FDD" },
+            { value: "D", text: "H-TDD" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q13",
+        question: "前向功率控制控制的是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 的功率？",
+        options: [
+            { value: "A", text: "移动台" },
+            { value: "B", text: "基站" },
+            { value: "C", text: "手机" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q14",
+        question: "基带信号是指 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "已调信号" },
+            { value: "B", text: "调制信号" },
+            { value: "C", text: "原始的电信号" },
+            { value: "D", text: "载波" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q15",
+        question: "频率分集需要用 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 个接收机来接收同一信号？",
+        options: [
+            { value: "A", text: "4" },
+            { value: "B", text: "1" },
+            { value: "C", text: "2" },
+            { value: "D", text: "3" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q16",
+        question: "调制技术按照调制信号性质分类可分为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "连续波调制和脉冲调制" },
+            { value: "B", text: "线性调制和非线性调制" },
+            { value: "C", text: "连续波调制和数字调制" },
+            { value: "D", text: "模拟调制和数字调制" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q17",
+        question: "(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 被确定为第三代移动通信系统（IMT-2000）的信道编码方案之一。",
+        options: [
+            { value: "A", text: "语音编码" },
+            { value: "B", text: "Turbo码" },
+            { value: "C", text: "纠错码" },
+            { value: "D", text: "信道编码" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q18",
+        question: "分集技术的作用是为了对抗 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "阴影效应" },
+            { value: "B", text: "远近效应" },
+            { value: "C", text: "多径效应" },
+            { value: "D", text: "多普勒效应" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q19",
+        question: "下列哪项不属于模拟调制的基本形式 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) ？",
+        options: [
+            { value: "A", text: "调频" },
+            { value: "B", text: "频移键控" },
+            { value: "C", text: "调幅" },
+            { value: "D", text: "调相" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q20",
+        question: "功率控制按照通信的上下行链路方向可分为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "闭环和开环" },
+            { value: "B", text: "前向和反向" },
+            { value: "C", text: "内环和外环" },
+            { value: "D", text: "闭环和外环" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q21",
+        question: "移动通信的编码技术包括信源编码和 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) ？",
+        options: [
+            { value: "A", text: "信道编码" },
+            { value: "B", text: "Turbo码" },
+            { value: "C", text: "语音编码" },
+            { value: "D", text: "纠错码" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q22",
+        question: "频率分集需要用 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 个发射机来发送同一信号？",
+        options: [
+            { value: "A", text: "1" },
+            { value: "B", text: "3" },
+            { value: "C", text: "2" },
+            { value: "D", text: "4" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q23",
+        question: "功率控制技术是为了解决什么问题 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )",
+        options: [
+            { value: "A", text: "多普勒效应" },
+            { value: "B", text: "阴影效应" },
+            { value: "C", text: "远近效应" },
+            { value: "D", text: "盲点效应" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q24",
+        question: "CDMA2000采用哪种扩频技术 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) ？",
+        options: [
+            { value: "A", text: "混合扩频" },
+            { value: "B", text: "时跳" },
+            { value: "C", text: "跳频" },
+            { value: "D", text: "直接序列扩频" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q25",
+        question: "FER的意思是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "数据速率" },
+            { value: "B", text: "误帧率" },
+            { value: "C", text: "误码率" },
+            { value: "D", text: "信号功率" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q26",
+        question: "快衰落是由 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 现象导致？",
+        options: [
+            { value: "A", text: "远近效应" },
+            { value: "B", text: "多普勒效应" },
+            { value: "C", text: "多径效应" },
+            { value: "D", text: "阴影效应" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q27",
+        question: "空间分集也称为是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "天线分集" },
+            { value: "B", text: "极化分集" },
+            { value: "C", text: "时间分集" },
+            { value: "D", text: "频率分集" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q28",
+        question: "反向功率控制控制的是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 的功率？",
+        options: [
+            { value: "A", text: "移动台" },
+            { value: "B", text: "BBU" },
+            { value: "C", text: "RRU" },
+            { value: "D", text: "基站" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q29",
+        question: "慢衰落是由 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 现象导致？",
+        options: [
+            { value: "A", text: "多普勒效应" },
+            { value: "B", text: "多径效应" },
+            { value: "C", text: "远近效应" },
+            { value: "D", text: "阴影效应" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q30",
+        question: "WCDMA采用哪种扩频技术 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) ？",
+        options: [
+            { value: "A", text: "跳频" },
+            { value: "B", text: "直接序列扩频" },
+            { value: "C", text: "混合扩频" },
+            { value: "D", text: "时跳" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q31",
+        question: "GSM采用哪种扩频技术 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "直接序列扩频" },
+            { value: "B", text: "时跳" },
+            { value: "C", text: "跳频" },
+            { value: "D", text: "混合扩频" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q32",
+        question: "下列哪项不属于数字调制的基本调制方式 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) ？",
+        options: [
+            { value: "A", text: "频移键控" },
+            { value: "B", text: "调幅" },
+            { value: "C", text: "相移键控" },
+            { value: "D", text: "幅度键控" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q33",
+        question: "下列分集方式中属于宏分集的是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "空间分集" },
+            { value: "B", text: "极化分集" },
+            { value: "C", text: "多基站分集" },
+            { value: "D", text: "频率分集" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q34",
+        question: "扩频通信W/B值范围一般为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "50左右" },
+            { value: "B", text: "10左右" },
+            { value: "C", text: "1–2" },
+            { value: "D", text: "≥100" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q35",
+        question: "AMPS移动系统用到的多址方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "码分多址" },
+            { value: "B", text: "时分多址" },
+            { value: "C", text: "频分多址" },
+            { value: "D", text: "正交频分多址" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q36",
+        question: "TD-SCDMA移动系统主要用到的多址方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "时分多址" },
+            { value: "B", text: "码分多址" },
+            { value: "C", text: "频分多址" },
+            { value: "D", text: "正交频分多址" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q37",
+        question: "下列上行功控方式没有反馈环路的是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "前向闭环功控" },
+            { value: "B", text: "反向开环功控" },
+            { value: "C", text: "反向外环功控" },
+            { value: "D", text: "反向闭环功控" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q38",
+        question: "扩频通信系统发送方信号处理流程为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "射频调制→扩频调制→信息调制" },
+            { value: "B", text: "信息调制→射频调制→扩频调制" },
+            { value: "C", text: "扩频调制→信息调制→射频调制" },
+            { value: "D", text: "信息调制→扩频调制→射频调制" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q39",
+        question: "基站同一扇区同时通过两根或多根物理天线来接收同一信号的分集方式称为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "频率分集" },
+            { value: "B", text: "空间分集" },
+            { value: "C", text: "时间分集" },
+            { value: "D", text: "多基站分集" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q40",
+        question: "CDMA2000移动系统主要采用的多址方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "正交频分多址" },
+            { value: "B", text: "码分多址" },
+            { value: "C", text: "频分多址" },
+            { value: "D", text: "时分多址" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q41",
+        question: "扩频通信系统接收方信号处理流程为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "扩频解调→信息解调→射频解调" },
+            { value: "B", text: "信息解调→扩频解调→射频解调" },
+            { value: "C", text: "射频解调→信息解调→扩频解调" },
+            { value: "D", text: "射频解调→扩频解调→信息解调" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q42",
+        question: "IS-95移动系统主要采用的多址方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "频分多址" },
+            { value: "B", text: "时分多址" },
+            { value: "C", text: "码分多址" },
+            { value: "D", text: "正交频分多址" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q43",
+        question: "TACS移动系统用到的多址方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "码分多址" },
+            { value: "B", text: "时分多址" },
+            { value: "C", text: "频分多址" },
+            { value: "D", text: "正交频分多址" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q44",
+        question: "WCDMA移动系统主要采用的多址方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "时分多址" },
+            { value: "B", text: "码分多址" },
+            { value: "C", text: "频分多址" },
+            { value: "D", text: "正交频分多址" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q45",
+        question: "解决远近效应的办法是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "跳频传输" },
+            { value: "B", text: "功率控制" },
+            { value: "C", text: "分频传输" },
+            { value: "D", text: "分时传输" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q46",
+        question: "IS-95移动系统上、下行信道用到的数字调制方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "GMSK" },
+            { value: "B", text: "BPSK" },
+            { value: "C", text: "QPSK" },
+            { value: "D", text: "上行为OQPSK，下行为BPSK" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q47",
+        question: "WCDMA移动系统上、下行信道用到的数字调制方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "上行为BPSK，下行为QPSK" },
+            { value: "B", text: "16QAM" },
+            { value: "C", text: "16QAM" },
+            { value: "D", text: "GMSK" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q48",
+        question: "TD-SCDMA移动系统用到的数字调制方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "64QAM" },
+            { value: "B", text: "QPSK" },
+            { value: "C", text: "16QAM" },
+            { value: "D", text: "BPSK" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q49",
+        question: "CDMA2000移动系统上、下行信道用到的数字调制方式为 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "16QAM" },
+            { value: "B", text: "64QAM" },
+            { value: "C", text: "QPSK" },
+            { value: "D", text: "BPSK" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q50",
+        question: "下列上行功控方式中精确度最高的是 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) 。",
+        options: [
+            { value: "A", text: "反向闭环功控" },
+            { value: "B", text: "反向开环功控" },
+            { value: "C", text: "反向外环功控" },
+            { value: "D", text: "前向闭环功控" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q51",
+        question: "当前移动基站用到最多的分集方式为 ( ) 。",
+        options: [
+            { value: "A", text: "空间分集" },
+            { value: "B", text: "时间分集" },
+            { value: "C", text: "频率分集" },
+            { value: "D", text: "双极化分集" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q52",
+        question: "宽带通信W/B值范围一般为 ( ) 。",
+        options: [
+            { value: "A", text: "50左右" },
+            { value: "B", text: "10左右" },
+            { value: "C", text: "1–2" },
+            { value: "D", text: "≥100" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q53",
+        question: "基站某扇区通过两个极化方向不同的同天线来接收同信号的分集方式称为 ( ) 。",
+        options: [
+            { value: "A", text: "频率分集" },
+            { value: "B", text: "空间分集" },
+            { value: "C", text: "时间分集" },
+            { value: "D", text: "极化分集" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q54",
+        question: "窄带通信W/B值范围一般为 ( ) 。",
+        options: [
+            { value: "A", text: "1–2" },
+            { value: "B", text: "50左右" },
+            { value: "C", text: "≥100" },
+            { value: "D", text: "10左右" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q55",
+        question: "GSM移动系统用到的多址方式为 ( ) 。",
+        options: [
+            { value: "A", text: "频分多址" },
+            { value: "B", text: "时分多址" },
+            { value: "C", text: "码分多址" },
+            { value: "D", text: "正交频分多址" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q56",
+        question: "LTE移动系统主要采用的多址方式为 ( ) 。",
+        options: [
+            { value: "A", text: "时分多址" },
+            { value: "B", text: "码分多址" },
+            { value: "C", text: "频分多址" },
+            { value: "D", text: "正交频分多址" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q57",
+        question: "LTE系统中，一个无线帧时间长度为： ( ) 。",
+        options: [
+            { value: "A", text: "0.5ms" },
+            { value: "B", text: "5ms" },
+            { value: "C", text: "1ms" },
+            { value: "D", text: "10ms" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q58",
+        question: "下述关于下行2×2 MIMO说法正确的是： ( ) 。",
+        options: [
+            { value: "A", text: "2发是指UE端，2收是指eNodeB端" },
+            { value: "B", text: "2发是指UE端，2收也是指UE端" },
+            { value: "C", text: "2发是指eNodeB端，2收也是指eNodeB端" },
+            { value: "D", text: "2发是指eNodeB端，2收是指UE端" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q59",
+        question: "以下哪个不是ZXSDR B8300具有的特点 ( ) 。",
+        options: [
+            { value: "A", text: "技术成熟，性能稳定" },
+            { value: "B", text: "容量小，方便扩容" },
+            { value: "C", text: "设计紧凑，部署方便" },
+            { value: "D", text: "全IP架构" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q60",
+        question: "在LTE网络结构中，负责处理信令的网元是： ( ) 。",
+        options: [
+            { value: "A", text: "SGW" },
+            { value: "B", text: "PGW" },
+            { value: "C", text: "MME" },
+            { value: "D", text: "HSS" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q61",
+        question: "在LTE网络结构中，负责处理用户面数据信息的网元是： ( ) 。",
+        options: [
+            { value: "A", text: "SGW" },
+            { value: "B", text: "MME" },
+            { value: "C", text: "HSS" },
+            { value: "D", text: "PGW" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q62",
+        question: "小区初搜过程，想通过计算获得CELLID号，需通过发送： ( ) 。",
+        options: [
+            { value: "A", text: "同步信号" },
+            { value: "B", text: "物理信号" },
+            { value: "C", text: "随机接入信号" },
+            { value: "D", text: "前导符" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q63",
+        question: "TD-LTE eNode B，以下哪个不是用户面的主要功能： ( ) 。",
+        options: [
+            { value: "A", text: "移动性管理" },
+            { value: "B", text: "图像业务" },
+            { value: "C", text: "数据业务" },
+            { value: "D", text: "语音业务" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q64",
+        question: "基于非竞争的随机接入模式，一般适应于以下哪种场景： ( ) 。",
+        options: [
+            { value: "A", text: "切换" },
+            { value: "B", text: "RRC连接状态下需要发送调度请求" },
+            { value: "C", text: "无线资源控制(RRC)连接重建" },
+            { value: "D", text: "空闲模式下初始化的随机接入" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q65",
+        question: "在LTE网络结构中，eNodeB与核心网之间的接口是： ( ) 。",
+        options: [
+            { value: "A", text: "X2" },
+            { value: "B", text: "S6a" },
+            { value: "C", text: "S11" },
+            { value: "D", text: "S1" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q66",
+        question: "以下哪个网元属于E-UTRAN： ( ) 。",
+        options: [
+            { value: "A", text: "EPC" },
+            { value: "B", text: "MME" },
+            { value: "C", text: "E-NodeB" },
+            { value: "D", text: "S-GW" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q67",
+        question: "LTE为实现双流而采用的多天线方案是： ( ) 。",
+        options: [
+            { value: "A", text: "空间复用" },
+            { value: "B", text: "以上都不对" },
+            { value: "C", text: "发射分集" },
+            { value: "D", text: "波束赋形" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q68",
+        question: "如需要配置3个4天线20M小区，最少需要用到BPL基带板块数是： ( ) 。",
+        options: [
+            { value: "A", text: "1" },
+            { value: "B", text: "3" },
+            { value: "C", text: "2" },
+            { value: "D", text: "4" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q69",
+        question: "LTE上下行传输使用的最小资源单位叫做： ( ) 。",
+        options: [
+            { value: "A", text: "REG" },
+            { value: "B", text: "PRB" },
+            { value: "C", text: "CCE" },
+            { value: "D", text: "RE" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q70",
+        question: "TD-LTE RRU-R8962中，用于与BBU直接相连的接口是： ( ) 。",
+        options: [
+            { value: "A", text: "PWR接口" },
+            { value: "B", text: "OPT接口" },
+            { value: "C", text: "LTM接口" },
+            { value: "D", text: "ANT接口" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q71",
+        question: "S1接口不支持的功能有： ( ) 。",
+        options: [
+            { value: "A", text: "NAS信令传输功能" },
+            { value: "B", text: "SGW承载业务管理功能" },
+            { value: "C", text: "支持连接态的UE在LTE系统内移动性管理功能" },
+            { value: "D", text: "网络共享功能" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q72",
+        question: "下行物理共享信道是： ( ) 。",
+        options: [
+            { value: "A", text: "PDCCH" },
+            { value: "B", text: "PCFICH" },
+            { value: "C", text: "PHICH" },
+            { value: "D", text: "PDSCH" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q73",
+        question: "组内ID的最大取值为： ( ) 。",
+        options: [
+            { value: "A", text: "3" },
+            { value: "B", text: "2" },
+            { value: "C", text: "4" },
+            { value: "D", text: "1" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q74",
+        question: "LTE采用扁平化网络结构的原因是： ( )",
+        options: [
+            { value: "A", text: "开局容易，O&M操作简单但传输时延大，需要增加大量设备，有利于提高网络稳定性" },
+            { value: "B", text: "以上全部错误" },
+            { value: "C", text: "设备少、开局容易，O&M操作简单但传输时延大，有利于提高网络稳定性" },
+            { value: "D", text: "设备少、开局容易，并且传输时延少，O&M操作简单，有利于提高网络稳定性" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q75",
+        question: "在eNodeB的MAC子层与物理层的SAP是哪个？ ( ) 。",
+        options: [
+            { value: "A", text: "无线承载" },
+            { value: "B", text: "逻辑信道" },
+            { value: "C", text: "物理信道" },
+            { value: "D", text: "传输信道" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q76",
+        question: "BBU和RRU之间通过 ( ) 进行传输：",
+        options: [
+            { value: "A", text: "双绞线" },
+            { value: "B", text: "光纤" },
+            { value: "C", text: "天馈线" },
+            { value: "D", text: "同轴电缆" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q77",
+        question: "下列对于LTE系统中下行参考信号目的描述错误的是： ( ) 。",
+        options: [
+            { value: "A", text: "下行信道质量测量（又称为信道探测）" },
+            { value: "B", text: "时间和频率同步" },
+            { value: "C", text: "小区搜索" },
+            { value: "D", text: "下行信道估计，用于UE端的相干检测和解调" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q78",
+        question: "LTE采用 ( ) 作为下行多址方式。",
+        options: [
+            { value: "A", text: "CDMA" },
+            { value: "B", text: "OFDMA" },
+            { value: "C", text: "TDMA" },
+            { value: "D", text: "FDMA" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q79",
+        question: "天线的VSWR合理的范围为： ( ) 。",
+        options: [
+            { value: "A", text: "1<VSWR<1.5" },
+            { value: "B", text: "VSWR>1.5" },
+            { value: "C", text: "1<VSWR<3.0" },
+            { value: "D", text: "VSWR>3.0" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q80",
+        question: "哪种情形下可以进行无竞争的随机接入？ ( ) 。",
+        options: [
+            { value: "A", text: "由Idle状态进行初始接入" },
+            { value: "B", text: "无线链路失败后进行初始接入" },
+            { value: "C", text: "在Active情况下，上行数据到达，如果没有建立上行同步，或者没有资源发送调度请求，则需要随机接入" },
+            { value: "D", text: "切换时进行随机接入" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q81",
+        question: "物理随机接入信道是： ( ) 。",
+        options: [
+            { value: "A", text: "PUSCH" },
+            { value: "B", text: "PHICH" },
+            { value: "C", text: "PDCCH" },
+            { value: "D", text: "PRACH" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q82",
+        question: "LTE中定义的最大小区ID个数为： ( ) 。",
+        options: [
+            { value: "A", text: "65536" },
+            { value: "B", text: "504" },
+            { value: "C", text: "168" },
+            { value: "D", text: "3" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q83",
+        question: "一个CCE对应 ( ) 个REG：",
+        options: [
+            { value: "A", text: "9" },
+            { value: "B", text: "12" },
+            { value: "C", text: "1" },
+            { value: "D", text: "3" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q84",
+        question: "ICIC技术是用来解决： ( ) 。",
+        options: [
+            { value: "A", text: "随机干扰" },
+            { value: "B", text: "邻频干扰" },
+            { value: "C", text: "同频干扰" },
+            { value: "D", text: "异系统干扰" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q85",
+        question: "每个小区有 ( ) 个可用的前导：",
+        options: [
+            { value: "A", text: "64" },
+            { value: "B", text: "256" },
+            { value: "C", text: "128" },
+            { value: "D", text: "32" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q86",
+        question: "LTE的设计目标是： ( ) 。",
+        options: [
+            { value: "A", text: "高的数据速率" },
+            { value: "B", text: "低时延" },
+            { value: "C", text: "以上都正确" },
+            { value: "D", text: "分组优化的无线接入技术" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q87",
+        question: "在LTE系统协议中，MAC层对数据进行： ( ) 。",
+        options: [
+            { value: "A", text: "复用" },
+            { value: "B", text: "压缩和加密" },
+            { value: "C", text: "编码" },
+            { value: "D", text: "调制" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q88",
+        question: "小区专用的参考信号为： ( ) 。",
+        options: [
+            { value: "A", text: "MBSFN-RS" },
+            { value: "B", text: "SRS" },
+            { value: "C", text: "CRS" },
+            { value: "D", text: "UE-RS" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q89",
+        question: "LTE的全称是： ( ) 。",
+        options: [
+            { value: "A", text: "Later Time Evolution" },
+            { value: "B", text: "Long Term Evolution" },
+            { value: "C", text: "Later Term Evolution" },
+            { value: "D", text: "Long Time Evolution" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q90",
+        question: "MIB信息是携带在哪个下行物理层信道中？ ( ) 。",
+        options: [
+            { value: "A", text: "PDCCH" },
+            { value: "B", text: "PBCH" },
+            { value: "C", text: "PCFICH" },
+            { value: "D", text: "PHICH" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q91",
+        question: "在LTE系统协议中，RLC层对数据进行： ( ) 。",
+        options: [
+            { value: "A", text: "压缩加密" },
+            { value: "B", text: "分段" },
+            { value: "C", text: "调制" },
+            { value: "D", text: "映射" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q92",
+        question: "关于LTE的指标与需求，下列说法中正确的是： ( ) 。",
+        options: [
+            { value: "A", text: "支持不同大小的系统带宽" },
+            { value: "B", text: "C-plane时延为5ms" },
+            { value: "C", text: "上行峰值数据速率达100Mb/s（20MHz，2×2 MIMO）" },
+            { value: "D", text: "不支持离散的频谱分配" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q93",
+        question: "下面不属于控制面协议的是： ( ) 。",
+        options: [
+            { value: "A", text: "APP" },
+            { value: "B", text: "SCTP" },
+            { value: "C", text: "S1AP" },
+            { value: "D", text: "NAS" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q94",
+        question: "如果某一公路旁边有一定向站，采用垂直线极化定向天线，空间分集接收，请问两个天线的连线和公路成什么角度最合理？ ( ) 。",
+        options: [
+            { value: "A", text: "45度" },
+            { value: "B", text: "90度" },
+            { value: "C", text: "0度" },
+            { value: "D", text: "30度" }
+        ],
+        correctAnswer: "B"
+    },
+    {
+        id: "q95",
+        question: "LTE支持灵活的系统带宽配置，以下 ( ) 带宽是LTE协议不支持的？",
+        options: [
+            { value: "A", text: "5MHz" },
+            { value: "B", text: "10MHz" },
+            { value: "C", text: "1.25MHz" },
+            { value: "D", text: "3MHz" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q96",
+        question: "HARQ的信息是承载在哪个信道上的？ ( ) 。",
+        options: [
+            { value: "A", text: "PHICH" },
+            { value: "B", text: "PCFICH" },
+            { value: "C", text: "PDSCH" },
+            { value: "D", text: "PDCCH" }
+        ],
+        correctAnswer: "A"
+    },
+    {
+        id: "q97",
+        question: "下列哪个网元属于E-UTRAN？ ( ) 。",
+        options: [
+            { value: "A", text: "MME" },
+            { value: "B", text: "P-GW" },
+            { value: "C", text: "E-NodeB" },
+            { value: "D", text: "S-GW" }
+        ],
+        correctAnswer: "C"
+    },
+    {
+        id: "q98",
+        question: "下行物理信道的一般处理过程为： ( )",
+        options: [
+            { value: "A", text: "加扰、层映射、调制、RE映射、预编码、OFDM信号产生" },
+            { value: "B", text: "加扰、调制、层映射、RE映射、预编码、OFDM信号产生" },
+            { value: "C", text: "加扰、预编码、调制、层映射、RE映射、OFDM信号产生" },
+            { value: "D", text: "加扰、调制、层映射、预编码、RE映射、OFDM信号产生" }
+        ],
+        correctAnswer: "D"
+    },
+    {
+        id: "q99",
+        question: "LTE系统由 ( ) 、E-NodeB和UE等三个部分组成：",
+        options: [
+            { value: "A", text: "MME" },
+            { value: "B", text: "E-UTRAN" },
+            { value: "C", text: "EPC" },
+            { value: "D", text: "EPS" }
+        ],
+        correctAnswer: "C"
+    }
+            ];
+
+            // 打乱选项顺序的函数
+            function shuffleOptions(options) {
+                // 创建选项的副本，避免修改原始数据
+                const shuffledOptions = [...options];
+                // Fisher-Yates 洗牌算法
+                for (let i = shuffledOptions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+                }
+                return shuffledOptions;
+            }
+
+            // 渲染题目
+            const questionsContainer = document.getElementById('questionsContainer');
+            const totalQuestionsElement = document.getElementById('totalQuestions');
+            
+            totalQuestionsElement.textContent = questions.length;
+            questions.forEach((q, index) => {
+                // 打乱选项顺序
+                const shuffledOptions = shuffleOptions(q.options);
+                
+                const questionHTML = `
+                    <div class="question-container bg-white rounded-lg shadow-md p-6 mb-6" id="${q.id}">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-blue-100 text-blue-800 font-bold rounded-full w-8 h-8 flex items-center justify-center mr-3">${index + 1}</div>
+                            <div>
+                                <p class="font-medium text-gray-800">${q.question}</p>
+                                <div class="mt-4 space-y-3" id="options-${q.id}">
+                                    ${shuffledOptions.map(opt => `
+                                        <label class="block border border-gray-200 rounded-lg p-3 cursor-pointer hover:bg-blue-50 transition">
+                                            <input type="radio" name="${q.id}" value="${opt.value}" class="mr-2">
+                                            <span>${opt.text}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="answer-feedback hidden mt-4 p-3 rounded-lg border border-transparent">
+                            <p class="font-medium"></p>
+                        </div>
+                    </div>
+                `;
+                questionsContainer.innerHTML += questionHTML;
+            });
+            // 选择选项时的样式变化和即时反馈
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const questionId = this.name;
+                    const questionContainer = document.getElementById(questionId);
+                    const feedbackDiv = questionContainer.querySelector('.answer-feedback');
+                    
+                    // 移除所有选项的选中样式
+                    questionContainer.querySelectorAll('label').forEach(label => {
+                        label.classList.remove('selected-option', 'correct-answer', 'wrong-answer');
+                    });
+                    
+                    // 给当前选中的选项添加样式
+                    if (this.checked) {
+                        this.closest('label').classList.add('selected-option');
+                        
+                        // 更新问题编号样式为已作答
+                        const questionNumber = questionContainer.querySelector('.bg-blue-100');
+                        questionNumber.classList.remove('bg-blue-100', 'text-blue-800');
+                        questionNumber.classList.add('bg-green-100', 'text-green-800');
+                        
+                        // 检查答案并显示反馈
+                        const currentQuestion = questions.find(q => q.id === questionId);
+                        if (currentQuestion) {
+                            if (this.value === currentQuestion.correctAnswer) {
+                                this.closest('label').classList.add('correct-answer');
+                                feedbackDiv.classList.remove('hidden', 'wrong-answer');
+                                feedbackDiv.classList.add('correct-answer');
+                                feedbackDiv.querySelector('p').textContent = '回答正确！';
+                            } else {
+                                this.closest('label').classList.add('wrong-answer');
+                                feedbackDiv.classList.remove('hidden', 'correct-answer');
+                                feedbackDiv.classList.add('wrong-answer');
+                                feedbackDiv.querySelector('p').textContent = '回答错误！';
+                                
+                                // 高亮显示正确答案
+                                const optionsContainer = questionContainer.querySelector(`#options-${questionId}`);
+                                const labels = optionsContainer.querySelectorAll('label');
+                                labels.forEach(label => {
+                                    const input = label.querySelector('input');
+                                    if (input.value === currentQuestion.correctAnswer) {
+                                        label.classList.add('correct-answer');
+                                    }
+                                });
+                            }
+                            feedbackDiv.classList.remove('hidden');
+                        }
+                    }
+                });
+            });
+            // 查看结果按钮点击事件
+            document.getElementById('submitBtn').addEventListener('click', function() {
+                let score = 0;
+                let answeredCount = 0;
+                
+                // 计算得分
+                questions.forEach(q => {
+                    const selectedOption = document.querySelector(`input[name="${q.id}"]:checked`);
+                    if (selectedOption) {
+                        answeredCount++;
+                        if (selectedOption.value === q.correctAnswer) {
+                            score += 20;
+                        }
+                    }
+                });
+                
+                // 显示结果弹窗
+                document.getElementById('correctCount').textContent = `${score/20}/${questions.length}`;
+                document.getElementById('score').textContent = `${score}分`;
+                document.getElementById('scoreBar').style.width = `${score}%`;
+                document.getElementById('resultModal').classList.remove('hidden');
+            });
+            // 关闭弹窗按钮
+            document.getElementById('closeModalBtn').addEventListener('click', function() {
+                document.getElementById('resultModal').classList.add('hidden');
+            });
+            // 重置按钮
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                // 重置所有选择
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // 移除所有样式
+                document.querySelectorAll('.question-container').forEach(container => {
+                    container.querySelectorAll('label').forEach(label => {
+                        label.classList.remove('selected-option', 'correct-answer', 'wrong-answer');
+                    });
+                    
+                    const questionNumber = container.querySelector('.w-8');
+                    questionNumber.classList.remove('bg-green-100', 'text-green-800');
+                    questionNumber.classList.add('bg-blue-100', 'text-blue-800');
+                    
+                    const feedbackDiv = container.querySelector('.answer-feedback');
+                    feedbackDiv.classList.add('hidden');
+                    feedbackDiv.classList.remove('correct-answer', 'wrong-answer');
+                });
+                
+                // 隐藏结果弹窗
+                document.getElementById('resultModal').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
