@@ -11,8 +11,9 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.4;
-            max-width: 100vw;
+            max-width: 150vw;
             overflow-x: hidden;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
         .blank {
             position: relative;
@@ -51,16 +52,15 @@
             opacity: 0;
         }
         .question-card {
-            transition: all 0.2s ease;
             margin-bottom: 1.5rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
-        .question-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
+        
         @media (min-width: 1024px) {
             .question-card {
                 padding: 2.5rem;
+                width: 90%;
+                margin: 0 auto;
             }
             .blank {
                 font-size: 1em;
@@ -73,27 +73,80 @@
         @media (min-width: 1536px) {
             .question-card {
                 padding: 3rem;
+                width: 100%;
+                margin: 0 auto;
             }
+        }
+    
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .dark-mode .question-card {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .dark-mode .question-card:hover {
+            background-color: #2d3748;
+            border-color: #4a5568;
+        }
+        .dark-mode .blank {
+            background-color: #2d3748;
+            transition: background-color 0.2s ease;
+        }
+        .dark-mode .blank::after {
+            background-color: #4a5568;
+            transition: background-color 0.2s ease;
+        }
+        .dark-mode .blank-text {
+            color: #e2e8f0;
+        }
+        .dark-mode #searchInput {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: #e2e8f0;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+        .dark-mode .bg-gray-50 {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .dark-mode .text-gray-700,
+.dark-mode h1 {
+            color: #e2e8f0;
         }
     </style>
 </head>
-<body class="bg-white min-h-screen">
-    <div class="container mx-auto px-4 py-16 max-w-5xl">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+<body class="min-h-screen dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-16 max-w-7xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">现代通信知识点整理</h1>
 
     </br>
 
-        <div class="flex flex-col items-center mb-8 space-y-4">
-            <div class="w-full max-w-md">
+        <div class="flex flex-row items-center justify-between mb-8 w-[85%] mx-auto">
+            <div class="flex-1 mr-4">
                 <input type="text" id="searchInput" placeholder="搜索题目或答案..." class="w-full px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-gray-400 transition-smooth">
             </div>
-            <div class="flex justify-center space-x-4">
+            <div class="flex space-x-4">
                 <button onclick="showAllAnswers()" class="px-6 py-2 bg-gray-800 text-white rounded-sm hover:bg-black transition-smooth flex items-center">
-                    <span class="mr-2">👀</span> 显示所有答案
+                    <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg> 显示所有答案
                 </button>
                 <button onclick="hideAllAnswers()" class="px-6 py-2 bg-gray-800 text-white rounded-sm hover:bg-black transition-smooth flex items-center">
-                    <span class="mr-2">🙈</span> 隐藏所有答案
+                    <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg> 隐藏所有答案
+                </button>
+                <button onclick="toggleDarkMode()" class="px-6 py-2 bg-gray-800 text-white rounded-sm hover:bg-black transition-smooth flex items-center">
+                    <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg> 深色模式
                 </button>
             </div>
         </div>
@@ -143,18 +196,18 @@
             },
             {
                 id: 7,
-                "question": "通信中常将携带信息的电磁波称为载波，对应的频率称作载频。载波频率[blank:1],通信容量[blank:2]，因⽽光载波或光频通信容量最⼤。",
+                "question": "通信中常将携带信息的电磁波称为载波，对应的频率称作载频。载波频率[blank:1]，通信容量[blank:2]，因⽽光载波或光频通信容量最⼤。",
                 "answers": ["越⾼","越大"]
             },
             {
                 "id": 8,
-                "question": "1960 年：西奥多·梅曼发明了第⼀台激光器，为光通信提供了理想光源。",
-                "answers": [""]
+                "question": "1960 年：[blank:1]发明了第⼀台激光器，为光通信提供了理想光源。",
+                "answers": ["西奥多·梅曼"]
             },
             {
                 "id": 9,
-                "question": "1977 年：“中国光纤通信之⽗”- 赵梓森院⼠，拉出中国第⼀根实⽤光纤；",
-                "answers": [""]
+                "question": "1977 年：“中国光纤通信之⽗” —— [blank:1]院⼠，拉出中国第⼀根实⽤光纤；",
+                "answers": ["赵梓森"]
             },
             {
                 "id": 10,
@@ -163,23 +216,23 @@
             },
             {
                 "id": 11,
-                "question": "光纤通信的系统组成：光发送机、接收机和光纤链路。",
-                "answers": [""]
+                "question": "光纤通信的系统组成：[blank:1]、[blank:2]和[blank:3]。",
+                "answers": ["光发送机","接收机","光纤链路"]
             },
             {
                 "id": 12,
-                "question": "光发送机由模拟或数字电接⼝、电压 - 电流驱动电路、光源组件与光纤跳线等组成。",
-                "answers": [""]
+                "question": "光发送机由[blank:1]、电压-电流驱动电路、光源组件与光纤跳线等组成。",
+                "answers": ["模拟或数字电接⼝"]
             },
             {
                 "id": 13,
-                "question": "光发送机的功能：将电信号转换为光信号。",
-                "answers": [""]
+                "question": "光发送机的功能：[blank:1]。",
+                "answers": ["将电信号转换为光信号"]
             },
             {
                 "id": 14,
-                "question": "光纤链路由光纤连接器、光缆终端盒、光缆线路盒、中继器和光纤构成。",
-                "answers": [""]
+                "question": "光纤链路由[blank:1]、[blank:2]、[blank:3]、[blank:4]和[blank:5]构成。",
+                "answers": ["光纤连接器","光缆终端盒","光缆线路盒","中继器","光纤"]
             },
             {
                 "id": 15,
@@ -599,6 +652,16 @@
         });
 
         renderQuestions();
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const darkModeBtn = document.querySelector('button[onclick="toggleDarkMode()"]');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeBtn.innerHTML = '<svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg> 浅色模式';
+            } else {
+                darkModeBtn.innerHTML = '<svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg> 深色模式';
+            }
+        }
     </script>
 </body>
 </html>
