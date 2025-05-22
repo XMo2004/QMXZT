@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>现代通信知识点整理</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.4;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        .blank {
+            position: relative;
+            display: inline-block;
+            background-color: #f5f5f5;
+            border-radius: 2px;
+            padding: 2px 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8em;
+        }
+        .blank::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            transition: opacity 0.2s ease;
+        }
+        .blank:hover::after {
+            opacity: 0;
+        }
+        .blank-text {
+            visibility: hidden;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        .blank:hover .blank-text,
+        .blank.show-answer .blank-text {
+            visibility: visible;
+        }
+        .blank.show-answer::after {
+            opacity: 0;
+        }
+        .question-card {
+            transition: all 0.2s ease;
+            margin-bottom: 1.5rem;
+        }
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        @media (min-width: 1024px) {
+            .question-card {
+                padding: 2.5rem;
+            }
+            .blank {
+                font-size: 1em;
+                padding: 6px 14px;
+            }
+            #questions {
+                padding: 0 2rem;
+            }
+        }
+        @media (min-width: 1536px) {
+            .question-card {
+                padding: 3rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <div class="container mx-auto px-4 py-16 max-w-5xl">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">现代通信知识点整理</h1>
+
+    </br>
+
+        <div class="flex flex-col items-center mb-8 space-y-4">
+            <div class="w-full max-w-md">
+                <input type="text" id="searchInput" placeholder="搜索题目或答案..." class="w-full px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-gray-400 transition-smooth">
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button onclick="showAllAnswers()" class="px-6 py-2 bg-gray-800 text-white rounded-sm hover:bg-black transition-smooth flex items-center">
+                    <span class="mr-2">👀</span> 显示所有答案
+                </button>
+                <button onclick="hideAllAnswers()" class="px-6 py-2 bg-gray-800 text-white rounded-sm hover:bg-black transition-smooth flex items-center">
+                    <span class="mr-2">🙈</span> 隐藏所有答案
+                </button>
+            </div>
+        </div>
+
+        <div id="questions" class="space-y-8 text-xl text-gray-700"></div>
+        <div class="mt-10 p-6 bg-gray-50 border-l-2 border-gray-200 rounded-sm">
+            <p class="text-gray-700 text-center text-base font-medium">💡 使用方法：将鼠标悬停在灰色填空处查看答案，或使用上方按钮控制所有答案的显示</p>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        const questionsData = [
+            {
+                id: 1,
+                question: "现代通信：⼀种宽带的、数字的、融合了计算机技术的通信⽅式。",
+                answers: [""]
+            },
+            {
+                id: 2,
+                question: "现代通信包含：[blank:1]、[blank:2]、[blank:3]、[blank:4]。",
+                answers: ["卫星通信","微波通信","光纤通信","移动通信"]
+            },
+            {
+                id: 3,
+                question: "光通信：是指利⽤光波进⾏信息传递的⼀种通信⽅式。",
+                answers: [""]
+            },
+            {
+                id: 4,
+                question: "通过传输媒介划分：[blank:1]。",
+                answers: ["⾃由空间光通信 (FSO)、光纤通信"]
+            },
+            {
+                id: 5,
+                question: "光波在[blank:1]传播称为⾃由空间光通信 (FSO)；",
+                answers: ["⼤⽓层或⼤⽓层外的⾃由空间"]
+            },
+            {
+                id: 6,
+                question: "光纤通信的优点：[blank:1]、[blank:2]、[blank:3]。",
+                answers: [
+                    "传输损耗小",
+                    "抗电磁干扰能力强",
+                    "保密性好"
+                ]
+            }
+        ];
+
+        function showAllAnswers() {
+            document.querySelectorAll('.blank').forEach(blank => {
+                blank.classList.add('show-answer');
+            });
+        }
+
+        function hideAllAnswers() {
+            document.querySelectorAll('.blank').forEach(blank => {
+                blank.classList.remove('show-answer');
+            });
+        }
+
+        function renderQuestions(filterText = '') {
+            const questionsContainer = document.getElementById('questions');
+            questionsContainer.innerHTML = '';
+            
+            const filteredQuestions = questionsData.filter(item => {
+                if (!filterText) return true;
+                const searchText = filterText.toLowerCase();
+                const questionMatch = item.question.toLowerCase().includes(searchText);
+                const answerMatch = item.answers.some(answer => 
+                    answer.toLowerCase().includes(searchText)
+                );
+                return questionMatch || answerMatch;
+            });
+            
+            filteredQuestions.forEach(item => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card p-6 bg-white border border-gray-100 rounded-sm hover:bg-gray-50 transition-smooth';
+                
+                let questionText = item.question;
+                item.answers.forEach((answer, index) => {
+                    questionText = questionText.replace(`[blank:${index + 1}]`,
+                        `<span class="blank"><span class="blank-text">${answer}</span></span>`);
+                });
+                
+                questionDiv.innerHTML = `
+                    <div class="flex items-start">
+                        <span class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-600 rounded-full font-semibold text-xl">${item.id}</span>
+                        <p class="ml-4 flex-grow text-xl">${questionText}</p>
+                    </div>
+                `;
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+        
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderQuestions(e.target.value);
+        });
+
+        renderQuestions();
+    </script>
+</body>
+</html>

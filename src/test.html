@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通信知识填空练习</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .blank {
+            position: relative;
+            display: inline-block;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            padding: 0 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .blank::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #94a3b8;
+            border-radius: 4px;
+            transition: opacity 0.2s;
+        }
+        .blank:hover::after {
+            opacity: 0;
+        }
+        .blank-text {
+            visibility: hidden;
+        }
+        .blank:hover .blank-text {
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">通信知识填空练习</h1>
+      
+        <div class="space-y-6 text-gray-700">
+            <div class="p-4 border border-gray-200 rounded-lg">
+                <p class="mb-2">1. 现代通信：<span class="blank"><span class="blank-text">⼀种宽带的、数字的、融合了计算机技术的</span></span>通信⽅式。</p>
+            </div>
+          
+            <div class="p-4 border border-gray-200 rounded-lg">
+                <p class="mb-2">2. 现代通信包含：<span class="blank"><span class="blank-text">卫星通信、微波通信、光纤通信、移动通信</span></span>。</p>
+            </div>
+          
+            <div class="p-4 border border-gray-200 rounded-lg">
+                <p class="mb-2">3. 光通信：是指<span class="blank"><span class="blank-text">利⽤光波进⾏信息传递的</span></span>⼀种通信⽅式。</p>
+            </div>
+          
+            <div class="p-4 border border-gray-200 rounded-lg">
+                <p class="mb-2">4. 通过传输媒介划分：<span class="blank"><span class="blank-text">⾃由空间光通信 (FSO)、光纤通信</span></span>。</p>
+            </div>
+          
+            <div class="p-4 border border-gray-200 rounded-lg">
+                <p class="mb-2">5. 光波在<span class="blank"><span class="blank-text">⼤⽓层或⼤⽓层外的⾃由空间</span></span>传播称为⾃由空间光通信 (FSO)；</p>
+            </div>
+        </div>
+      
+        <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+            <p class="text-blue-800">使用方法：将鼠标悬停在灰色填空处查看答案</p>
+        </div>
+    </div>
+</body>
+</html>
