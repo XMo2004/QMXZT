@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《现代通信技术》计算题</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      chtml: {
+        scale: 1,
+        minScale: 0.5,
+        matchFontHeight: false,
+        adaptiveCSS: true
+      },
+      options: {
+        enableMenu: false
+      }
+    };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.4;
+            max-width: 150vw;
+            overflow-x: hidden;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .blank {
+            position: relative;
+            display: inline-block;
+            background-color: #f5f5f5;
+            border-radius: 2px;
+            padding: 2px 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+        .blank::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            transition: opacity 0.2s ease;
+        }
+        .blank:hover::after {
+            opacity: 0;
+        }
+        .blank-text {
+            visibility: hidden;
+            color: #2563eb;
+            font-weight: 500;
+        }
+        .blank:hover .blank-text,
+        .blank.show-answer .blank-text {
+            visibility: visible;
+        }
+        .blank.show-answer::after {
+            opacity: 0;
+        }
+        .question-card {
+            margin-bottom: 1.5rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .choice-item {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .choice-item:hover {
+            background-color: #f0f0f0;
+        }
+        .choice-item.selected {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+        }
+        .correct-answer {
+            background-color: #e6ffed;
+            border-color: #2ea44f;
+        }
+        .wrong-answer {
+            background-color: #ffebe9;
+            border-color: #cf222e;
+        }
+        .answered .choice-item {
+            cursor: default;
+        }
+        
+        @media (min-width: 1024px) {
+            .question-card {
+                padding: 2.5rem;
+                width: 90%;
+                margin: 0 auto;
+            }
+            .blank {
+                font-size: 1em;
+                padding: 6px 14px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .flex {
+                flex-direction: column;
+            }
+            .flex.flex-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .flex-1 {
+                width: 100%;
+                margin-right: 0;
+            }
+            .w-64 {
+                display: none;
+            }
+            .flex.space-x-4 {
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 0.5rem;
+            }
+            .flex.space-x-4 button {
+                flex: 1 0 calc(50% - 0.5rem);
+                min-width: 0;
+                padding: 0.5rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+        }
+        
+        .dark-mode {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+        .dark-mode .question-card {
+            background-color: #1f2937;
+            border-color: #374151;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .dark-mode .blank {
+            background-color: #1f2937;
+        }
+        .dark-mode .blank::after {
+            background-color: #374151;
+        }
+        .dark-mode .blank-text {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+        .dark-mode .choice-item:hover {
+            background-color: #1f2937;
+        }
+        .dark-mode .choice-item.selected {
+            background-color: #1e40af;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+        .dark-mode .correct-answer {
+            background-color: #064e3b;
+            border-color: #059669;
+        }
+        .dark-mode .wrong-answer {
+            background-color: #7f1d1d;
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 transition-colors duration-200">
+    <div class="flex">
+        <!-- 左侧目录导航栏 -->
+        <div class="w-64 p-4 sticky top-0 h-screen overflow-y-auto hidden md:block bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-sm">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">目录</h3>
+            <ul class="space-y-1">
+                <li><a href="#section-basicConcepts" class="block px-3 py-2 rounded text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200">1. 基础概念</a></li>
+                <li><a href="#section-formulaExamples" class="block px-3 py-2 rounded text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200">2. 公式示例</a></li>
+                <li><a href="#section-choiceQuestions" class="block px-3 py-2 rounded text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200">3. 选择题</a></li>
+                <li><a href="#section-fillInQuestions" class="block px-3 py-2 rounded text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200">4. 填空题</a></li>
+            </ul>
+        </div>
+        
+        <div class="flex-1 container mx-auto px-4 py-16 max-w-7xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-8 text-center">《现代通信技术》计算题</h1>
+
+    </br>
+
+        <div class="flex flex-row items-center justify-between mb-8 w-[100%] mx-auto">
+            <div class="flex-1 mr-4">
+                <input type="text" id="searchInput" placeholder="搜索内容..." class="w-full px-4 py-2 border border-gray-300 rounded-sm focus:outline-none focus:border-gray-400 transition-smooth">
+            </div>
+            <div class="flex space-x-4">
+                <button id="searchButton" class="px-6 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition-smooth flex items-center">
+                    <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg> 搜索
+                </button>
+                <button onclick="toggleDarkMode()" class="px-6 py-2 bg-gray-800 text-white rounded-sm hover:bg-black transition-smooth flex items-center">
+                    <svg class="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg> 深色模式
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4 p-6 bg-gray-50 dark:bg-gray-800 border-l-2 border-gray-200 dark:border-gray-600 rounded-sm w-[100%] mx-auto">
+            <p class="text-gray-700 dark:text-gray-300 text-center text-base font-medium">💡 使用方法：将鼠标悬停在灰色填空处查看答案，或使用上方按钮控制所有答案的显示。<b>平板或桌面端横屏使用效果更佳！</b></p>
+        </div>
+        
+        </br>
+      
+        <div class="mb-8">
+            <h2 id="section-basicConcepts" class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">1. 基础概念</h2>
+            <div id="basicConcepts" class="space-y-4"></div>
+        </div>
+      
+        <div class="mb-8">
+            <h2 id="section-formulaExamples" class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">2. 公式示例</h2>
+            <div id="formulaExamples" class="space-y-6"></div>
+        </div>
+      
+        <div class="mb-8">
+            <h2 id="section-choiceQuestions" class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">3. 选择题</h2>
+            <div id="choiceQuestions" class="space-y-6"></div>
+        </div>
+      
+        <div class="mb-8">
+            <h2 id="section-fillInQuestions" class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">4. 填空题</h2>
+            <div id="fillInQuestions" class="space-y-6"></div>
+        </div>
+      
+        <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="fixed bottom-20 right-8 p-3 bg-gray-800 text-white rounded-full opacity-0 invisible transition-all duration-300 hover:bg-black dark:bg-gray-600 dark:hover:bg-gray-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
+
+
+    </div>
+
+    <script>
+        // 笔记数据
+        const basicConcepts = [
+            {
+                type: "text",
+                content: "通信系统由<strong>信源</strong>、<strong>发送设备</strong>、<strong>信道</strong>、<strong>接收设备</strong>和<strong>信宿</strong>五部分组成。"
+            },
+            {
+                type: "text",
+                content: "<strong>调制</strong>是将基带信号转换为适合信道传输的高频信号的过程，而<strong>解调</strong>则是相反的过程。"
+            }
+        ];
+        
+        const formulaExamples = [
+            {
+                type: "formula",
+                title: "香农公式",
+                content: "C = B \\log_2(1 + \\frac{S}{N})",
+                description: "其中C为信道容量，B为带宽，S/N为信噪比。"
+            },
+            {
+                type: "formula",
+                title: "奈奎斯特准则",
+                content: "R_{\\text{max}} = 2B \\log_2 M",
+                description: "其中R<sub>max</sub>为最大数据传输速率，B为带宽，M为信号电平数。"
+            }
+        ];
+        
+        const choiceQuestions = [
+            {
+                question: "下列哪种调制方式属于数字调制？",
+                options: [
+                    "AM调制",
+                    "FM调制",
+                    "PSK调制",
+                    "SSB调制"
+                ],
+                answer: 2,
+                explanation: "PSK(相移键控)是数字调制方式，其他都是模拟调制方式。"
+            },
+            {
+                question: "在光纤通信中，主要使用的光波长是？",
+                options: [
+                    "850nm",
+                    "1310nm",
+                    "1550nm",
+                    "以上都是"
+                ],
+                answer: 3,
+                explanation: "光纤通信中常用的三个波长窗口是850nm、1310nm和1550nm。"
+            }
+        ];
+        
+        const fillInQuestions = [
+            {
+                question: "在通信系统中，噪声主要分为<blank>和<blank>两种。",
+                blanks: ["加性噪声", "乘性噪声"]
+            },
+            {
+                question: "数字通信系统的主要性能指标是<blank>和<blank>。",
+                blanks: ["误码率", "传输速率"]
+            }
+        ];
+
+        // 渲染笔记内容
+        function renderNotes() {
+            renderBasicConcepts();
+            renderFormulaExamples();
+            renderChoiceQuestions();
+            renderFillInQuestions();
+        }
+
+        function renderBasicConcepts() {
+            const container = document.getElementById('basicConcepts');
+            basicConcepts.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm';
+                div.innerHTML = `<p class="text-gray-700 dark:text-gray-300">${item.content}</p>`;
+                container.appendChild(div);
+            });
+        }
+
+        function renderFormulaExamples() {
+            const container = document.getElementById('formulaExamples');
+            formulaExamples.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm';
+                div.innerHTML = `
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">${item.title}</h3>
+                    <div class="text-xl my-2 text-center">$${item.content}$</div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">${item.description}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderChoiceQuestions() {
+            const container = document.getElementById('choiceQuestions');
+            choiceQuestions.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm question-card';
+                div.innerHTML = `
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">${index + 1}. ${item.question}</h3>
+                    <div class="space-y-2" id="choices-${index}"></div>
+                    <div id="explanation-${index}" class="mt-3 p-3 bg-blue-50 dark:bg-blue-900 rounded hidden">
+                        <p class="text-blue-800 dark:text-blue-200">${item.explanation}</p>
+                    </div>
+                `;
+              
+                const choicesContainer = div.querySelector(`#choices-${index}`);
+                item.options.forEach((option, i) => {
+                    const choiceDiv = document.createElement('div');
+                    choiceDiv.className = 'choice-item p-3 border rounded-md';
+                    choiceDiv.innerHTML = `
+                        <span class="mr-2">${String.fromCharCode(65 + i)}.</span>
+                        <span>${option}</span>
+                    `;
+                    choiceDiv.addEventListener('click', () => {
+                        // 如果已经选择过，则不再处理
+                        if (div.classList.contains('answered')) return;
+                        
+                        // 标记已回答
+                        div.classList.add('answered');
+                        
+                        // 高亮正确答案
+                        const correctAnswer = choicesContainer.children[item.answer];
+                        correctAnswer.classList.add('correct-answer');
+                        
+                        // 如果选错，高亮错误答案
+                        if (i !== item.answer) {
+                            choiceDiv.classList.add('wrong-answer');
+                        }
+                        
+                        // 显示解析
+                        const explanation = div.querySelector(`#explanation-${index}`);
+                        explanation.classList.remove('hidden');
+                    });
+                    choicesContainer.appendChild(choiceDiv);
+                });
+              
+                container.appendChild(div);
+            });
+        }
+
+        function renderFillInQuestions() {
+            const container = document.getElementById('fillInQuestions');
+            fillInQuestions.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm question-card';
+              
+                // 处理填空题中的空白处
+                let questionHtml = item.question;
+                item.blanks.forEach((blank, i) => {
+                    questionHtml = questionHtml.replace('<blank>', `
+                        <span class="blank" onclick="this.classList.toggle('show-answer')">
+                            <span class="blank-text">${blank}</span>
+                        </span>
+                    `);
+                });
+              
+                div.innerHTML = `
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">${index + 1}. ${questionHtml}</h3>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('dark:bg-gray-900');
+            document.body.classList.toggle('bg-white');
+        }
+
+        // 返回顶部功能
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'invisible');
+                backToTopBtn.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'visible');
+                backToTopBtn.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 搜索功能实现
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) {
+                renderNotes();
+                return;
+            }
+            
+            const sections = ['basicConcepts', 'formulaExamples', 'choiceQuestions', 'fillInQuestions'];
+            sections.forEach(section => {
+                const container = document.getElementById(section);
+                container.innerHTML = '';
+                
+                noteData[section].forEach(item => {
+                    let content = '';
+                    if (item.type === 'text') {
+                        content = item.content;
+                    } else if (item.type === 'formula') {
+                        content = `${item.title}: $${item.content}$ - ${item.description}`;
+                    } else if (item.question) {
+                        content = item.question;
+                    }
+                    
+                    if (content.toLowerCase().includes(searchTerm)) {
+                        if (section === 'basicConcepts') {
+                            const div = document.createElement('div');
+                            div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm';
+                            div.innerHTML = `<p class="text-gray-700 dark:text-gray-300">${item.content}</p>`;
+                            container.appendChild(div);
+                        } else if (section === 'formulaExamples') {
+                            const div = document.createElement('div');
+                            div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm';
+                            div.innerHTML = `
+                                <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">${item.title}</h3>
+                                <div class="text-xl my-2 text-center">$${item.content}$</div>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">${item.description}</p>
+                            `;
+                            container.appendChild(div);
+                        } else if (section === 'choiceQuestions') {
+                            // 保留原有选择题渲染逻辑
+                            const div = document.createElement('div');
+                            div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm question-card';
+                            // ... 原有选择题渲染代码
+                            container.appendChild(div);
+                        } else if (section === 'fillInQuestions') {
+                            // 保留原有填空题渲染逻辑
+                            const div = document.createElement('div');
+                            div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm question-card';
+                            // ... 原有填空题渲染代码
+                            container.appendChild(div);
+                        }
+                    }
+                });
+            });
+            
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+        }
+        
+        // 初始化渲染
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNotes();
+            // 重新渲染MathJax公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
+            
+            // 添加搜索框事件监听
+            document.getElementById('searchInput').addEventListener('input', performSearch);
+            
+            // 添加搜索按钮事件监听
+            document.getElementById('searchButton').addEventListener('click', performSearch);
+            
+            // 添加搜索框回车键事件监听
+            document.getElementById('searchInput').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

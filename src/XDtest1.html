@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>《现代通信技术》知识点整理</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      chtml: {
+        scale: 1,
+        minScale: 0.5,
+        matchFontHeight: false,
+        adaptiveCSS: true
+      },
+      options: {
+        enableMenu: false
+      }
+    };
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
         
@@ -232,6 +251,13 @@
             e.preventDefault();
         });
         
+        // 添加空白处点击事件
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('blank')) {
+                e.target.classList.toggle('show-answer');
+            }
+        });
+        
         // 返回顶部功能
         const backToTopBtn = document.getElementById('backToTop');
         
@@ -255,22 +281,22 @@
         const questionsData = [
             {
                 id: 1,
-                question: "现代通信：⼀种[blank:1]、[blank:2]、融合了计算机技术的通信⽅式。",
+                question: "<b>现代通信</b>：⼀种[blank:1]、[blank:2]、融合了计算机技术的通信⽅式。",
                 answers: ["宽带的","数字的"]
             },
             {
                 id: 2,
-                question: "现代通信包含：[blank:1]、[blank:2]、[blank:3]、[blank:4]。",
+                question: "<b>现代通信</b>包含：[blank:1]、[blank:2]、[blank:3]、[blank:4]。",
                 answers: ["卫星通信","微波通信","光纤通信","移动通信"]
             },
             {
                 id: 3,
-                question: "光通信：是指利⽤[blank:1]进⾏信息传递的⼀种通信⽅式。",
+                question: "<b>光通信</b>：是指利⽤[blank:1]进⾏信息传递的⼀种通信⽅式。",
                 answers: ["光波"]
             },
             {
                 id: 4,
-                question: "通过传输媒介划分，光通信可分为：[blank:1]、[blank:2]。",
+                question: "通过传输媒介划分，<b>光通信</b>可分为：[blank:1]、[blank:2]。",
                 answers: ["⾃由空间光通信 (FSO)","光纤通信"]
             },
             {
@@ -280,16 +306,12 @@
             },
             {
                 id: 6,
-                question: "光纤通信的优点：[blank:1]、[blank:2]、[blank:3]。",
-                answers: [
-                    "传输损耗小",
-                    "抗电磁干扰能力强",
-                    "保密性好"
-                ]
+                question: "<b>光纤通信</b>的优点：[blank:1]、[blank:2]、[blank:3]。",
+                answers: ["传输损耗小","抗电磁干扰能力强","保密性好"]
             },
             {
                 id: 7,
-                "question": "通信中常将携带信息的电磁波称为载波，对应的频率称作载频。载波频率[blank:1]，通信容量[blank:2]，因⽽光载波或光频通信容量最⼤。",
+                "question": "通信中常将携带信息的电磁波称为<b>载波</b>，对应的频率称作<b>载频</b>。载波频率[blank:1]，通信容量[blank:2]，因⽽光载波或光频通信容量最⼤。",
                 "answers": ["越⾼","越大"]
             },
             {
@@ -310,12 +332,12 @@
             {
                 "id": 11,
                 "question": "光纤通信的系统组成：[blank:1]、[blank:2]和[blank:3]。",
-                "answers": ["光发送机","接收机","光纤链路"]
+                "answers": ["光发送机","光接收机","光纤链路"]
             },
             {
                 "id": 12,
-                "question": "光发送机由[blank:1]、电压-电流驱动电路、光源组件与光纤跳线等组成。",
-                "answers": ["模拟或数字电接⼝"]
+                "question": "光发送机由[blank:1]、[blank:2]、[blank:3]与光纤跳线等组成。",
+                "answers": ["模拟或数字电接⼝","电压-电流驱动电路","光源组件",]
             },
             {
                 "id": 13,
@@ -339,33 +361,33 @@
             },
             {
                 "id": 17,
-                "question": "光接收机：接收并解调光信号，将其还原为原始电信号。",
-                "answers": [""]
+                "question": "光接收机：[blank:1]，将其[blank:2]。",
+                "answers": ["接收并解调光信号","还原为原始电信号"]
             },
             {
                 "id": 18,
-                "question": "光放⼤器尤其是掺铒光纤放⼤器 (EDFA)已在实际的光纤通信系统中被⼴泛使⽤。",
-                "answers": [""]
+                "question": "光放⼤器尤其是[blank:1]已在实际的光纤通信系统中被⼴泛使⽤。",
+                "answers": ["掺铒光纤放⼤器 (EDFA)"]
             },
             {
                 "id": 19,
-                "question": "光纤通信采⽤的光源是半导体光源，如半导体发光⼆极管 LED、 半导体激光器 LD。",
-                "answers": [""]
+                "question": "光纤通信采⽤的光源是[blank:1]，如[blank:2]、 [blank:3]。",
+                "answers": ["半导体光源","半导体发光⼆极管 LED","半导体激光器 LD"]
             },
             {
                 "id": 20,
-                "question": "波⻓为 1.30 μm 和 1.55 μm 时，损耗⽐ 0.85 μm 还低，采⽤⻓波⻓光源，中继距离还会增加。",
-                "answers": [""]
+                "question": "波⻓为[blank:1]和[blank:2]时，损耗⽐[blank:3]还低，采⽤[blank:4]，中继距离还会增加。",
+                "answers": ["1.30 μm","1.55 μm","0.85 μm","⻓波⻓光源"]
             },
             {
                 "id": 21,
-                "question": "光纤分类：单模光纤，多模光纤。",
-                "answers": [""]
+                "question": "光纤分类：[blank:1]，[blank:2]。",
+                "answers": ["单模光纤","多模光纤"]
             },
             {
                 "id": 22,
-                "question": "单模光纤⽐多模光纤带宽⼤，系统的容量更⼤。",
-                "answers": [""]
+                "question": "单模光纤⽐多模光纤[blank:1]，[blank:2]。",
+                "answers": ["带宽⼤","系统的容量更⼤"]
             },
             {
                 "id": 23,
@@ -374,28 +396,28 @@
             },
             {
                 "id": 24,
-                "question": "光的波粒⼆象性：波动性和粒⼦性；",
-                "answers": [""]
+                "question": "光的波粒⼆象性：[blank:1]和[blank:2]；",
+                "answers": ["波动性","粒⼦性"]
             },
             {
                 "id": 25,
-                "question": "光与物质的相互作⽤：⾃发辐射，受激吸收和受激辐射。",
-                "answers": [""]
+                "question": "光与物质的相互作⽤：[blank:1]，[blank:2]和[blank:3]。",
+                "answers": ["⾃发辐射","受激吸收","受激辐射"]
             },
             {
                 "id": 26,
-                "question": "光纤的结构：纤芯、包层和防护层。",
-                "answers": [""]
+                "question": "光纤的结构：[blank:1]、[blank:2]和防护层。",
+                "answers": ["纤芯","包层"]
             },
             {
                 "id": 27,
-                "question": "纤芯与包层的折射率不同，n 纤芯 >n 包层。",
-                "answers": [""]
+                "question": "纤芯与包层的折射率不同，[blank:1]。",
+                "answers": ["$n_{纤芯}$ >$n_{包层}$"]
             },
             {
                 "id": 28,
-                "question": "通信⽤的光纤主要是指：⽯英光纤；⽯英光纤主要成分是：⾼纯度 SiO2。",
-                "answers": [""]
+                "question": "通信⽤的光纤主要是指：[blank:1]；⽯英光纤主要成分是：[blank:2]。",
+                "answers": ["⽯英光纤","⾼纯度$SiO_2$"]
             },
             {
                 "id": 29,
@@ -404,78 +426,78 @@
             },
             {
                 "id": 30,
-                "question": "光缆的结构和分类：层绞式，⻣架式，带状式和束管式。",
-                "answers": [""]
+                "question": "光缆的结构和分类：[blank:1]，[blank:2]，[blank:3]和[blank:4]。",
+                "answers": ["层绞式","⻣架式","带状式","束管式"]
             },
             {
                 "id": 31,
-                "question": "根据光纤端⾯上折射率分布，光纤可分为阶跃光纤和渐变光纤；",
-                "answers": [""]
+                "question": "根据光纤端⾯上折射率分布，光纤可分为[blank:1]和[blank:2]。",
+                "answers": ["阶跃光纤","渐变光纤"]
             },
             {
                 "id": 32,
-                "question": "全反射的意义：利⽤全反射可能实现导光，⽆能量损失的光传输。",
-                "answers": [""]
+                "question": "全反射的意义：[blank:1]。",
+                "answers": ["利⽤全反射可能实现导光，⽆能量损失的光传输"]
             },
             {
                 "id": 33,
-                "question": "全反射的条件：光疏介质包围光密介质，n 疏>n 密。",
-                "answers": [""]
+                "question": "全反射的条件：[blank:1]，[blank:2]。",
+                "answers": ["光疏介质包围光密介质","$n_疏>n_密$"]
             },
             {
                 "id": 34,
-                "question": "介质在其所有点上的电磁特性都相同则介质称为均匀介质；",
-                "answers": [""]
+                "question": "介质在其所有点上的电磁特性都相同则介质称为[blank:1]；",
+                "answers": ["均匀介质"]
             },
             {
                 "id": 35,
-                "question": "光纤不是均匀介质。",
-                "answers": [""]
+                "question": "光纤[blank:1]均匀介质。",
+                "answers": ["不是"]
             },
             {
                 "id": 36,
-                "question": "三个低损耗窗⼝，中⼼波⻓分别为：0.85um、1.30um、1.55um。",
-                "answers": [""]
+                "question": "三个低损耗窗⼝，中⼼波⻓分别为：[blank:1]、[blank:2]、[blank:3]。",
+                "answers": ["0.85um","1.30um","1.55um"]
             },
             {
                 "id": 37,
-                "question": "第三窗⼝ 1.55um，光纤损耗最低。",
-                "answers": [""]
+                "question": "[blank:1]，光纤损耗最低。",
+                "answers": ["第三窗⼝1.55um"]
             },
             {
                 "id": 38,
-                "question": "LD 是阈值器件，⼯作状态与注⼊电流⼤⼩有关；P 与 I 成正⽐。",
-                "answers": [""]
+                "question": "LD 是阈值器件，⼯作状态与注⼊电流⼤⼩有关；P 与 I [blank:1]。",
+                "answers": ["成正⽐"]
             },
             {
                 "id": 39,
-                "question": "LED 是⾮相⼲光源，以⾃发辐射为主。",
-                "answers": [""]
+                "question": "LED [blank:1]是光源，以[blank:2]为主。",
+                "answers": ["⾮相⼲","⾃发辐射"]
             },
             {
                 "id": 40,
-                "question": "光检测器：光电转换器件。",
-                "answers": [""]
+                "question": "光检测器：[blank:1]器件。",
+                "answers": ["光电转换"]
             },
             {
                 "id": 41,
-                "question": "实⽤化的 EDFA 其⼯作波⻓为 1.55µm。",
-                "answers": [""]
+                "question": "实⽤化的 EDFA 其⼯作波⻓为[blank:1]。",
+                "answers": ["1.55µm"]
             },
             {
                 "id": 42,
-                "question": "全光波⻓变换器：能直接把输⼈波⻓的信息转移到输出波⻓上，不必经过电转换。",
-                "answers": [""]
+                "question": "全光波⻓变换器：能直接把输⼈波⻓的信息转移到输出波⻓上，[blank:1]。",
+                "answers": ["不必经过电转换"]
             },
             {
                 "id": 43,
-                "question": "掺铒光纤放⼤器（EDFA）：能放⼤ 1550nm 波⻓的光信号。",
-                "answers": [""]
+                "question": "掺铒光纤放⼤器（EDFA）：能放⼤[blank:1]波⻓的光信号。",
+                "answers": ["1550nm"]
             },
             {
                 "id": 44,
-                "question": "掺铒光纤放⼤器（EDFA）：掺铒光纤、半导体泵浦⼆极管、光隔离器、WDM 合波/ 分波器。",
-                "answers": [""]
+                "question": "掺铒光纤放⼤器（EDFA）：[blank:1]、[blank:2]、[blank:3]、[blank:4]。",
+                "answers": ["掺铒光纤","半导体泵浦⼆极管","光隔离器","WDM合波/分波器"]
             },
             {
                 "id": 45,
@@ -634,38 +656,38 @@
             },
             {
                 "id": 76,
-                "question": "Transit（⼦午仪）系统：利⽤低轨卫星的多普勒频移效应定位，⾸次实现全球定位。",
-                "answers": [""]
+                "question": "[blank:1]：利⽤低轨卫星的多普勒频移效应定位，⾸次实现全球定位。",
+                "answers": ["Transit（⼦午仪）系统"]
             },
             {
                 "id": 77,
-                "question": "GPS 系统：伪随机码测距，全天候、空间基准的导航系统。",
-                "answers": [""]
+                "question": "GPS 系统：[blank:1]，全天候、空间基准的导航系统。",
+                "answers": ["伪随机码测距"]
             },
             {
                 "id": 78,
-                "question": "卫星导航系统：GPS、俄罗斯的 GLONASS、欧洲的 GALILEO、中国的“北⽃”。",
-                "answers": [""]
+                "question": "卫星导航系统：[blank:1]、俄罗斯的[blank:2]、欧洲的[blank:3]、中国的[blank:4]。",
+                "answers": ["GPS","GLONASS","GALILEO","“北斗”"]
             },
             {
                 "id": 79,
-                "question": "根据观测量的不同，定位⽅法可以分为：测距定位、测速定位、测⻆定位等。",
-                "answers": [""]
+                "question": "根据观测量的不同，定位⽅法可以分为：[blank:1]、[blank:2]、[blank:3]等。",
+                "answers": ["测距定位","测速定位","测⻆定位"]
             },
             {
                 "id": 80,
-                "question": "我国的“北⽃⼀号”系统是世界上第⼀个实⽤的专⽤静⽌卫星导航系统。",
-                "answers": [""]
+                "question": "我国的[blank:1]系统是世界上第⼀个实⽤的专⽤静⽌卫星导航系统。",
+                "answers": ["“北⽃⼀号”"]
             },
             {
                 "id": 81,
-                "question": "双静⽌卫星导航系统以有源⽅式⼯作。",
-                "answers": [""]
+                "question": "双静⽌卫星导航系统以[blank:1]⽅式⼯作。",
+                "answers": ["有源"]
             },
             {
                 "id": 82,
-                "question": "低轨系统：⽆源定位。",
-                "answers": [""]
+                "question": "低轨系统：[blank:1]定位。",
+                "answers": ["⽆源"]
             },
             {
                 "id": 83,
