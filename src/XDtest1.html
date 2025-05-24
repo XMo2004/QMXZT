@@ -29,7 +29,7 @@
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.4;
+            line-height: 4;
             max-width: 150vw;
             overflow-x: hidden;
             transition: background-color 0.2s ease, color 0.2s ease;
@@ -75,7 +75,7 @@
             opacity: 0;
         }
         .question-card {
-            margin-bottom: 1.5rem;
+            margin-bottom: 3rem;
             transition: background-color 0.2s ease, border-color 0.2s ease;
         }
         
@@ -176,18 +176,9 @@
     </style>
 </head>
 <body class="min-h-screen dark:bg-gray-900">
-    <!-- 密码验证弹窗 -->
-    <div id="passwordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-none shadow-xl max-w-md w-full transition-smooth">
-            <h2 class="text-2xl font-bold mb-6 text-center dark:text-white">请输入密码</h2>
-            <input type="password" id="passwordInput" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-none mb-4 dark:bg-gray-700 dark:text-white focus:outline-none focus:border-gray-400 transition-smooth" placeholder="在此输入密码">
-            <button onclick="checkPassword()" class="w-full bg-gray-800 hover:bg-black text-white py-2 px-4 rounded-none transition-smooth flex items-center justify-center">
-                确认
-            </button>
-        </div>
-    </div>
 
-    <div id="mainContent" class="container mx-auto px-4 py-16 max-w-7xl" style="display: none;">
+
+    <div id="mainContent" class="container mx-auto px-4 py-16 max-w-7xl">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">《现代通信技术》知识点整理</h1>
 
@@ -501,13 +492,13 @@
             },
             {
                 "id": 45,
-                "question": "光隔离器：确保光信号单向传输。",
-                "answers": [""]
+                "question": "光隔离器：[blank:1]。",
+                "answers": ["确保光信号单向传输"]
             },
             {
                 "id": 46,
-                "question": "SRA、SOA、EDFA 区别与联系：\n◦ 都靠转移泵浦能量实现光放⼤：SOA 电泵浦，SRA、EDFA 泵浦光；\n◦ 粒⼦数反转：\n▪ SRA 靠⾮线性散射实现放⼤，不需要粒⼦数反转；\n▪ SOA、EDFA 受激辐射，需要粒⼦数反转；\n◦ ⼯作波段：\n▪ SRA：1300nm，1400nm，1550nm ；\n▪ SOA：0.85um，1.30um，1.55um；\n▪ EDFA： 1.55um；",
-                "answers": [""]
+                "question": "SRA、SOA、EDFA 区别与联系：</br> 1️⃣ 都靠转移泵浦能量实现光放⼤：SOA[blank:1]，SRA、EDFA[blank:2]；</br> 2️⃣ 粒⼦数反转：</br>▪ SRA 靠[blank:3]实现放⼤，[blank:4]；</br>▪ SOA、EDFA [blank:5]，[blank:6]；</br> 3️⃣ ⼯作波段：</br>▪ SRA：[blank:7]，[blank:8]，[blank:9] ；</br>▪ SOA：[blank:10]，[blank:11]，[blank:12]；</br>▪ EDFA： [blank:13]；",
+                "answers": ["电泵浦","泵浦光","⾮线性散射","不需要粒⼦数反转","受激辐射","需要粒⼦数反转","1300nm","1400nm","1550nm","0.85um","1.30um","1.55um","1.55um"]
             },
             {
                 "id": 47,
@@ -516,7 +507,7 @@
             },
             {
                 "id": 48,
-                "question": "光纤放⼤器的应⽤\n◦ 线路（在线）光放⼤器：在线放⼤器代替光电光混合中继器。\n◦ 前置放⼤器：在光接收机前，以提⾼接收功率和信噪⽐，增加通信距离。\n◦ 功率（后置）放⼤器：在光发送机后以提⾼光发送机的发送功率，增加传输距离，这种放⼤器称为功率放⼤器。\n◦ 功率补偿器：将光放⼤器⽤于补偿光纤的分配损耗，以增⼤⽹络节点数。",
+                "question": "光纤放⼤器的应⽤</br>◦ 线路（在线）光放⼤器：在线放⼤器代替光电光混合中继器。</br>◦ 前置放⼤器：在光接收机前，以提⾼接收功率和信噪⽐，增加通信距离。</br>◦ 功率（后置）放⼤器：在光发送机后以提⾼光发送机的发送功率，增加传输距离，这种放⼤器称为功率放⼤器。</br>◦ 功率补偿器：将光放⼤器⽤于补偿光纤的分配损耗，以增⼤⽹络节点数。",
                 "answers": [""]
             },
             {
@@ -596,8 +587,8 @@
             },
             {
                 "id": 64,
-                "question": "中国第⼀颗试验卫星“东⽅红⼀号”。",
-                "answers": [""]
+                "question": "中国第⼀颗试验卫星“[blank:1]”。",
+                "answers": ["东⽅红⼀号"]
             },
             {
                 "id": 65,
@@ -626,33 +617,33 @@
             },
             {
                 "id": 70,
-                "question": "给定卫星⾼度和最⼩余隙⾼度时，可以确定最⼤的星间地⼼⻆ ，根据卫星的瞬时位置计算出实际的星间地⼼⻆ ， 则卫星相互间不可⻅，⽆法建⽴星际链路。",
+                "question": "给定卫星⾼度和最⼩余隙⾼度时，可以确定最⼤的星间地⼼⻆$\alpha_{max}$，根据卫星的瞬时位置计算出实际的星间地⼼⻆ ，$\alpha>\alpha_{max}$则卫星相互间不可⻅，⽆法建⽴星际链路。",
                 "answers": [""]
             },
             {
                 "id": 71,
-                "question": "多址技术：频分多址（FDMA），时分多址（TDMA） 和 码分多址（CDMA）；",
-                "answers": [""]
+                "question": "多址技术：[blank:1]，[blank:2]和[blank:3]；",
+                "answers": ["频分多址（FDMA）","时分多址（TDMA）","码分多址（CDMA）"]
             },
             {
                 "id": 72,
-                "question": "FDMA：交调⼲扰，产⽣新的频率分量。",
-                "answers": [""]
+                "question": "FDMA：[blank:1]，产⽣新的频率分量。",
+                "answers": ["交调⼲扰"]
             },
             {
                 "id": 73,
-                "question": "对于 TDMA ⽅式，不会产⽣交调⼲扰。",
-                "answers": [""]
+                "question": "对于 TDMA ⽅式，[blank:1]。",
+                "answers": ["不会产⽣交调⼲扰"]
             },
             {
                 "id": 74,
-                "question": "TDMA 系统的⽹同步复杂。",
-                "answers": [""]
+                "question": "TDMA 系统的[blank:1]复杂。",
+                "answers": ["⽹同步"]
             },
             {
                 "id": 75,
-                "question": "改进⽅案：S-ALOHA (时隙 ALOHA)协议，R-ALOHA（预约 ALOHA）协议。",
-                "answers": [""]
+                "question": "改进⽅案：[blank:1]，[blank:2]。",
+                "answers": ["S-ALOHA (时隙 ALOHA)协议","R-ALOHA（预约 ALOHA）协议"]
             },
             {
                 "id": 76,
